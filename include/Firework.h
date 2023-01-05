@@ -25,7 +25,7 @@ class Firework {
     void explode();
     void simulateFadeOut();
 
-    static constexpr int MK_SIZE = 200;
+    static constexpr int MK_SIZE = 220;
     static constexpr int M_MAX_LIFE = 5000;   // millisecond
     // life less than this will explodes
     static constexpr float M_EXPLODE_T = 0.6;

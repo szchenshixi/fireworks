@@ -7,8 +7,6 @@
  * Description: ASCII art fireworks demo
  */
 
-#include "TBarrier.h"
-// #include "particle.h"
 #include "Firework.h"
 #include <chrono>
 #include <mutex>
@@ -26,7 +24,7 @@ struct ThreadArgs {
     const size_t mkSize = 200;
     bool mStopFlag = false;
     std::mutex mFlagMutex;
-    TBarrier* mBarrier;
+    // TBarrier* mBarrier;
 };
 
 /**
@@ -82,7 +80,6 @@ void ncursesInit() {
 // }
 
 int main() {
-    // sleep(10);
     constexpr int INTERVAL_MS = 33; // 30 FPS
     auto lastFrameMs = Clock::now();
     auto currentFrameMs = Clock::now();
@@ -154,7 +151,7 @@ int main() {
                 }
                 firework.init();
             }
-            firework.update(33);
+            firework.update(INTERVAL_MS);
             firework.draw();
         }
 
@@ -166,7 +163,7 @@ int main() {
 
         // std::this_thread::sleep_for(std::chrono::milliseconds(x));
         // wait a bit
-        std::this_thread::sleep_for(DurationMs(33) -
+        std::this_thread::sleep_for(DurationMs(INTERVAL_MS) -
                                     (currentFrameMs - lastFrameMs));
         lastFrameMs = currentFrameMs;
         // std::cout << (currentFrameMs - lastFrameMs).count() << "ms passed"

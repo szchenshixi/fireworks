@@ -1,5 +1,4 @@
 #include "Firework.h"
-
 #include <math.h>
 
 void Firework::init() {
@@ -36,18 +35,21 @@ void Firework::update(int deltaTimeMs) {
 void Firework::explode() {
     for (Particle& particle : mParticles) {
         particle.setCenterToCurrentPosition();
-        // if (mColor == 3 && rand() % 3 != 0) {
-        // If the color is Magenta, set it to heart shape
+        if ((mColor == 3 || mColor == 7) && rand() % 5 != 0) {
+            // If the color is Magenta or Red, set it to heart shape
+            // with a 4/5 probability
             setHeartShapeVelocity(particle);
-        // } else {
-        //     setCircleShapeVelocity(particle);
-        // }
+        } else {
+            setCircleShapeVelocity(particle);
+        }
     }
 }
 
 void Firework::simulateFadeOut() {
     for (Particle& particle : mParticles) {
-        if (particle.distance() > randMToN((float)200, 500)) {
+        if ((lifeInPercentage() < randMToN(0, M_EXPLODE_T) && rand() % 10 == 0) ||
+            particle.distance() > pow(randMToN((float)18, 22), 2)) {
+        // if (lifeInPercentage() > randMToN(M_EXPLODE_T, 1)) {
             particle.fadeOut();
         }
     }
@@ -56,7 +58,8 @@ void Firework::simulateFadeOut() {
 void Firework::draw() {
     attron(COLOR_PAIR(mColor)); // turn on color scheme
 
-    if (lifeInPercentage() > M_HIGHLIGHT_T && lifeInPercentage() < M_EXPLODE_T) {
+    if (lifeInPercentage() > M_HIGHLIGHT_T &&
+        lifeInPercentage() < M_EXPLODE_T) {
         attron(A_BOLD); // display bright characters right after explosion
     } else if (lifeInPercentage() < M_DIM_T) {
         attron(A_DIM); // display dim characters right before dying
@@ -101,15 +104,15 @@ std::pair<float, float> Firework::heartEquation(float angle) {
 void Firework::setHeartShapeVelocity(Particle& particle) {
     float velRowBase = NAN;
     float velColBase = NAN;
-    static float scaler = 0.1 * randVel();
+    static float scaler = 0.15 * randVel();
     std::tie(velRowBase, velColBase) =
       Firework::heartEquation(randMToN(0, 2 * M_PI));
     particle.setVelocity(velRowBase * scaler, velColBase * scaler);
 }
 void Firework::setCircleShapeVelocity(Particle& particle) {
     float angle = randMToN(0, 2 * M_PI);
-    float velRowBase = 0.2 * sin(angle); // compensate the row-col size diff
+    float velRowBase = 0.3 * sin(angle); // compensate the row-col size diff
     float velColBase = cos(angle);
-    float scaler = 3 * randVel();
+    float scaler = 2.2 * randVel();
     particle.setVelocity(velRowBase * scaler, velColBase * scaler);
 }
