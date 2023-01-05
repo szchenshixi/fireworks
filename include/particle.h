@@ -11,17 +11,19 @@
 #include <stddef.h>
 #include <stdint.h>
 
-typedef struct particle_t {
-    float pos[2];
-    float center[2];
-    float vel[2];
-    float life;
-    uint8_t color;
-    bool exploded;
-} particle;
+struct Particle {
+    float mPos[2];
+    float mCenter[2];
+    float mVel[2];
+    float mLife;
+    uint8_t mColor;
+    bool mExploded;
+};
 
-void particle_init(particle *p, size_t size);
+void particleInit(Particle* p, size_t size);
 
-void particle_update(particle *p, float dt, size_t size);
+void particleUpdate(Particle* p, float dt, size_t size);
 
-void particle_draw(particle *p, size_t size);
+void particleDraw(Particle* p, size_t size);
+
+float unitRand();

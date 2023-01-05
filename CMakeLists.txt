@@ -17,7 +17,8 @@ set(SRC_FILES
     src/main.cpp)
 
 add_executable(fireworks ${SRC_FILES})
-target_link_libraries(fireworks PUBLIC TracyClient ncurses)
+# target_link_libraries(fireworks PUBLIC TracyClient ncurses)
+target_link_libraries(fireworks PUBLIC ncurses)
 target_include_directories(fireworks PUBLIC ./include)
 
 

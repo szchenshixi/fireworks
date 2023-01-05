@@ -33,12 +33,13 @@ void Firework::update(int deltaTimeMs) {
 }
 
 void Firework::explode() {
+    float seed = 0.15 * randVel();
     for (Particle& particle : mParticles) {
         particle.setCenterToCurrentPosition();
         if ((mColor == 3 || mColor == 7) && rand() % 5 != 0) {
             // If the color is Magenta or Red, set it to heart shape
             // with a 4/5 probability
-            setHeartShapeVelocity(particle);
+            setHeartShapeVelocity(particle, seed);
         } else {
             setCircleShapeVelocity(particle);
         }
@@ -101,10 +102,9 @@ std::pair<float, float> Firework::heartEquation(float angle) {
     row *= 0.7;
     return std::make_pair(row, col);
 }
-void Firework::setHeartShapeVelocity(Particle& particle) {
+void Firework::setHeartShapeVelocity(Particle& particle, float scaler) {
     float velRowBase = NAN;
     float velColBase = NAN;
-    static float scaler = 0.15 * randVel();
     std::tie(velRowBase, velColBase) =
       Firework::heartEquation(randMToN(0, 2 * M_PI));
     particle.setVelocity(velRowBase * scaler, velColBase * scaler);

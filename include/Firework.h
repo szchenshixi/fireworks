@@ -19,7 +19,7 @@ class Firework {
     static float randMToN(float M, float N);
     static float randVel();
     static std::pair<float, float> heartEquation(float angle);
-    static void setHeartShapeVelocity(Particle& particle);
+    static void setHeartShapeVelocity(Particle& particle, float scaler);
     static void setCircleShapeVelocity(Particle& particle);
 
     void explode();
