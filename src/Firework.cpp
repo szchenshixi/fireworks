@@ -33,7 +33,7 @@ void Firework::update(int deltaTimeMs) {
 }
 
 void Firework::explode() {
-    float seed = 0.15 * randVel();
+    float seed = -randMToN(0.0005, 0.00055);
     for (Particle& particle : mParticles) {
         particle.setCenterToCurrentPosition();
         if ((mColor == 3 || mColor == 7) && rand() % 5 != 0) {
@@ -48,9 +48,10 @@ void Firework::explode() {
 
 void Firework::simulateFadeOut() {
     for (Particle& particle : mParticles) {
-        if ((lifeInPercentage() < randMToN(0, M_EXPLODE_T) && rand() % 10 == 0) ||
+        if ((lifeInPercentage() < randMToN(0, M_EXPLODE_T) &&
+             rand() % 10 == 0) ||
             particle.distance() > pow(randMToN((float)18, 22), 2)) {
-        // if (lifeInPercentage() > randMToN(M_EXPLODE_T, 1)) {
+            // if (lifeInPercentage() > randMToN(M_EXPLODE_T, 1)) {
             particle.fadeOut();
         }
     }
@@ -85,9 +86,11 @@ void Firework::draw() {
 float Firework::lifeInPercentage() const { return (float)mLife / M_MAX_LIFE; }
 
 float Firework::randZeroToOne() { return ((float)rand() / (float)RAND_MAX); }
+
 float Firework::randMToN(float M, float N) {
     return (N - M) * randZeroToOne() + M;
 }
+
 float Firework::randVel() {
     // Generate the velocity in a reasonable range
     constexpr float SCALE_DOWN_FACTOR = 3e-5;
@@ -95,6 +98,7 @@ float Firework::randVel() {
                    ((float)-LINES) * (float)SCALE_DOWN_FACTOR;
     return result;
 }
+
 std::pair<float, float> Firework::heartEquation(float angle) {
     float row = 6.5 * cos(angle) - 2.5 * cos(2 * angle) - cos(3 * angle) -
                 0.5 * cos(4 * angle);
@@ -102,6 +106,7 @@ std::pair<float, float> Firework::heartEquation(float angle) {
     row *= 0.7;
     return std::make_pair(row, col);
 }
+
 void Firework::setHeartShapeVelocity(Particle& particle, float scaler) {
     float velRowBase = NAN;
     float velColBase = NAN;
@@ -109,6 +114,7 @@ void Firework::setHeartShapeVelocity(Particle& particle, float scaler) {
       Firework::heartEquation(randMToN(0, 2 * M_PI));
     particle.setVelocity(velRowBase * scaler, velColBase * scaler);
 }
+
 void Firework::setCircleShapeVelocity(Particle& particle) {
     float angle = randMToN(0, 2 * M_PI);
     float velRowBase = 0.3 * sin(angle); // compensate the row-col size diff
